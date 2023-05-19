@@ -13,50 +13,55 @@ interface Piece
 }
 
 const pieces: Piece[] = [];
-
+const initialBoardState: Piece[] = [];
 
 // pawns setup
 for (let i = 0; i < 8; i++)
 {
-    pieces.push({ image: "assets/images/pawn_b.png", xPosition: i, yPosition: 6});
-    pieces.push({ image: "assets/images/pawn_w.png", xPosition: i, yPosition: 1});
+    initialBoardState.push({ image: "assets/images/pawn_b.png", xPosition: i, yPosition: 6});
+    initialBoardState.push({ image: "assets/images/pawn_w.png", xPosition: i, yPosition: 1});
 };
 // rest of the pieces setup
 for (let i = 0; i < 2; i++)
 {
     const type = (i === 0) ? "b" : "w";
     const yPosition = (i === 0) ? 7 : 0;
-    pieces.push({ image: `assets/images/rook_${type}.png`, xPosition: 0, yPosition});
-    pieces.push({ image: `assets/images/rook_${type}.png`, xPosition: 7, yPosition});
-    pieces.push({ image: `assets/images/knight_${type}.png`, xPosition: 1, yPosition});
-    pieces.push({ image: `assets/images/knight_${type}.png`, xPosition: 6, yPosition});
-    pieces.push({ image: `assets/images/bishop_${type}.png`, xPosition: 2, yPosition});
-    pieces.push({ image: `assets/images/bishop_${type}.png`, xPosition: 5, yPosition});
-    pieces.push({ image: `assets/images/queen_${type}.png`, xPosition: 3, yPosition});
-    pieces.push({ image: `assets/images/king_${type}.png`, xPosition: 4, yPosition});
+    initialBoardState.push({ image: `assets/images/rook_${type}.png`, xPosition: 0, yPosition});
+    initialBoardState.push({ image: `assets/images/rook_${type}.png`, xPosition: 7, yPosition});
+    initialBoardState.push({ image: `assets/images/knight_${type}.png`, xPosition: 1, yPosition});
+    initialBoardState.push({ image: `assets/images/knight_${type}.png`, xPosition: 6, yPosition});
+    initialBoardState.push({ image: `assets/images/bishop_${type}.png`, xPosition: 2, yPosition});
+    initialBoardState.push({ image: `assets/images/bishop_${type}.png`, xPosition: 5, yPosition});
+    initialBoardState.push({ image: `assets/images/queen_${type}.png`, xPosition: 3, yPosition});
+    initialBoardState.push({ image: `assets/images/king_${type}.png`, xPosition: 4, yPosition});
 }
 
 
 
 export default function Chessboard()
 {
-    // controller functions
+    const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
+    const [gridX, setGridX] = useState(0);
+    const [gridY, setGridY] = useState(0);
+    const [pieces, setPieces] = useState<Piece[]>(initialBoardState);
     const chessboardRef = useRef<HTMLDivElement>(null);
 
-    let activePiece: HTMLElement | null = null;
-
+    // controller functions
     function grabPiece(e: React.MouseEvent)
     {
         const element = e.target as HTMLElement;
-        if (element.classList.contains("chess-piece"))
+        const chessboard = chessboardRef.current;
+        if (element.classList.contains("chess-piece") && chessboard)
         {
+            setGridX(Math.floor((e.clientX - chessboard.offsetLeft) / 100));
+            setGridY(Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / 100)));
             const x = e.clientX - 50;
             const y = e.clientY - 50;
             element.style.position = "absolute";
             element.style.left = `${x}px`;
             element.style.top = `${y}px`;
 
-            activePiece = element;
+            setActivePiece(element);
         }
     }
 
@@ -71,6 +76,7 @@ export default function Chessboard()
             const maxY = chessboard.offsetTop + chessboard.clientHeight - 75;
             const x = e.clientX - 50;
             const y = e.clientY - 50;
+            // set position to "absolute" so it's positioned relative to its first ancestor element
             activePiece.style.position = "absolute";
 
             // if x is smaller than minimum amount, set position to min
@@ -101,9 +107,24 @@ export default function Chessboard()
 
     function dropPiece(e: React.MouseEvent)
     {
-        if(activePiece)
+        const chessboard = chessboardRef.current;
+        if(activePiece && chessboard)
         {
-            activePiece = null;
+            const xPosition = Math.floor((e.clientX - chessboard.offsetLeft) / 100);
+            const yPosition = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / 100));
+
+            setPieces ((value) => {
+                const pieces = value.map(p => {
+                    if (p.xPosition === gridX && p.yPosition === gridY)
+                    {
+                        p.xPosition = xPosition;
+                        p.yPosition = yPosition;
+                    }
+                    return p;
+                });
+                return pieces;
+            })
+            setActivePiece(null);
         }
     }
 
