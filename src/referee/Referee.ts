@@ -1,32 +1,53 @@
-import { PieceType, TeamType } from "../components/Chessboard/Chessboard";
+import { PieceType, TeamType, Piece } from "../components/Chessboard/Chessboard";
 
 export default class Referee
 {
-    isValidMove(previousXPosition: number, previousYPosition: number, xPosition: number, yPosition: number, type: PieceType, team: TeamType)
-    {
-
-        // Pawn rules
-        if (type === PieceType.PAWN)
+    tileIsOccupied(
+        xPosition: number, 
+        yPosition: number, 
+        boardstate: Piece[]
+        ): boolean
         {
-            if (team === TeamType.OUR)
+            const piece = boardstate.find(p => p.xPosition === xPosition && p.yPosition === yPosition)
+
+            if (piece)
             {
-                if (previousYPosition === 1)
-                {
-                    // check if pawn is moved by either 1 or 2 spaces on first turn
-                    if (previousXPosition === xPosition && (yPosition - previousYPosition === 1 || yPosition - previousYPosition === 2))
-                    {
-                        return true;
-                    }
-                } else {
-                    // check if pawn has moved already, and if so only allow it to move 1 square up
-                    if (previousXPosition === xPosition && yPosition - previousYPosition === 1)
-                    {
-                        return true;
-                    }
-                }
+                return true;
+            } else {
+                return false;
             }
         }
 
+    isValidMove(
+        previousXPosition: number, 
+        previousYPosition: number, 
+        xPosition: number, 
+        yPosition: number, 
+        type: PieceType, 
+        team: TeamType,
+        boardState: Piece[]
+        )
+    {
+        // PAWN RULES
+        if (type === PieceType.PAWN)
+        {
+            const specialRow = (team === TeamType.OUR) ? 1 : 6;
+            const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
+
+            if (previousXPosition === xPosition && previousYPosition === specialRow && yPosition - previousYPosition === 2*pawnDirection)
+            {
+                if (!this.tileIsOccupied(xPosition, yPosition, boardState) && !this.tileIsOccupied(xPosition, yPosition - pawnDirection, boardState))
+                {
+                    return true;
+                }
+            } else if (previousXPosition === xPosition && yPosition - previousYPosition === pawnDirection) 
+            {
+                if (!this.tileIsOccupied(xPosition, yPosition, boardState))
+                {
+                    return true;
+                } 
+            }
+        }
 
         return false;
     }
