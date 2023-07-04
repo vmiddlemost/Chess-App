@@ -133,28 +133,43 @@ export default function Chessboard()
             const xPosition = Math.floor((e.clientX - chessboard.offsetLeft) / 100);
             const yPosition = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / 100));
 
-            // Updates the piece position
-            setPieces ((value) => {
-                const pieces = value.map(p => {
-                    if (p.xPosition === gridX && p.yPosition === gridY)
-                    {
-                        const validMove = referee.isValidMove(gridX, gridY, xPosition, yPosition, p.type, p.team, value);
+            // log current/attacked piece location
+            const currentPiece = pieces.find(p => p.xPosition === gridX && p.yPosition === gridY);
+            const attackedPiece = pieces.find(p=> p.xPosition === xPosition && p.yPosition === yPosition);
 
-                        if (validMove)
+            if (currentPiece)
+            {
+                const validMove = referee.isValidMove(gridX, gridY, xPosition, yPosition, currentPiece?.type, currentPiece.team, pieces);
+
+                if (validMove)
+                {
+                    // UPDATES PIECE POSITION
+                    // If piece is attacked, it is removed
+                    const updatedPieces = pieces.reduce((results, piece) => {
+                        if (piece.xPosition === currentPiece.xPosition && piece.yPosition === currentPiece.yPosition)
                         {
-                            p.xPosition = xPosition;
-                            p.yPosition = yPosition;
-                        } else {
-                            activePiece.style.position = 'relative';
-                            activePiece.style.removeProperty('top');
-                            activePiece.style.removeProperty('left');
+                            piece.xPosition = xPosition;
+                            piece.yPosition = yPosition;
+                            results.push(piece);
+                        } else if (!(piece.xPosition === xPosition && piece.yPosition === yPosition))
+                        {
+                            results.push(piece);
                         }
 
-                    }
-                    return p;
-                });
-                return pieces;
-            })
+                        return results;
+                    }, [] as Piece[]);
+
+                    setPieces(updatedPieces);
+                } else
+                {
+                    // RESETS PIECE POSITION
+                    activePiece.style.position = "relative";
+                    activePiece.style.removeProperty("top");
+                    activePiece.style.removeProperty("left");
+                }
+
+            }
+
             setActivePiece(null);
         }
     }

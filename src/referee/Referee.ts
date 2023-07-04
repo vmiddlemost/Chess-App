@@ -8,13 +8,31 @@ export default class Referee
         boardstate: Piece[]
         ): boolean
         {
-            const piece = boardstate.find(p => p.xPosition === xPosition && p.yPosition === yPosition)
+            const piece = boardstate.find(p => p.xPosition === xPosition && p.yPosition === yPosition);
 
             if (piece)
             {
                 return true;
             } else {
                 return false;
+            }
+        }
+
+    tileIsOccupiedByOpponent(
+        xPosition: number,
+        yPosition: number,
+        boardState: Piece[],
+        team: TeamType
+        ): boolean
+        {
+            const piece = boardState.find((p) => p.xPosition === xPosition && p.yPosition === yPosition && p.team !== team);
+
+            if (piece)
+            {
+                return true
+            } else
+            {
+                return false
             }
         }
 
@@ -31,9 +49,16 @@ export default class Referee
         // PAWN RULES
         if (type === PieceType.PAWN)
         {
+            // console.log("x=",xPosition);
+            // console.log("p_x=",previousXPosition);
+            // console.log("y=",yPosition);
+            // console.log("p_y=",previousYPosition);
+            
+            // create variables to work out which side is moving (pawnDirection = 1 if white, -1 if black)
             const specialRow = (team === TeamType.OUR) ? 1 : 6;
             const pawnDirection = (team === TeamType.OUR) ? 1 : -1;
 
+            // MOVEMENT LOGIC
             if (previousXPosition === xPosition && previousYPosition === specialRow && yPosition - previousYPosition === 2*pawnDirection)
             {
                 if (!this.tileIsOccupied(xPosition, yPosition, boardState) && !this.tileIsOccupied(xPosition, yPosition - pawnDirection, boardState))
@@ -47,7 +72,24 @@ export default class Referee
                     return true;
                 } 
             }
-        }
+            // ATTACKING LOGIC
+            else if (xPosition - previousXPosition === -1 && yPosition - previousYPosition === pawnDirection)
+            {
+                // taking to diagonally left
+                if (this.tileIsOccupiedByOpponent(xPosition, yPosition, boardState, team))
+                {
+                    return true;
+                }
+            }
+            else if (xPosition - previousXPosition === 1 && yPosition - previousYPosition === pawnDirection)
+            {
+                // taking diagonally right
+                if (this.tileIsOccupiedByOpponent(xPosition, yPosition, boardState, team))
+                {
+                    return true;
+                }
+            }
+        } 
 
         return false;
     }
