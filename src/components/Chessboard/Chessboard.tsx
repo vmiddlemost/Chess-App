@@ -13,6 +13,7 @@ export interface Piece
     yPosition: number;
     type: PieceType;
     team: TeamType;
+    enPassant?: boolean;
 }
 
 export enum TeamType
@@ -139,20 +140,66 @@ export default function Chessboard()
 
             if (currentPiece)
             {
-                const validMove = referee.isValidMove(gridX, gridY, xPosition, yPosition, currentPiece?.type, currentPiece.team, pieces);
+                const isEnPassantMove = referee.isEnPassantMove(
+                    gridX,
+                    gridY,
+                    xPosition,
+                    yPosition,
+                    currentPiece.type,
+                    currentPiece.team,
+                    pieces
+                );
+                const pawnDirection = currentPiece.team === TeamType.OUR ? 1 : -1;
 
-                if (validMove)
+                const validMove = referee.isValidMove(gridX, gridY, xPosition, yPosition, currentPiece?.type, currentPiece.team, pieces);
+                if (isEnPassantMove)
+                {
+                    const updatedPieces = pieces.reduce((results, piece) => 
+                    {
+                        if (piece.xPosition === gridX && piece.yPosition === gridY)
+                        {
+                            piece.enPassant = false;
+                            piece.xPosition = xPosition;
+                            piece.yPosition = yPosition;
+                            results.push(piece);
+                        } else if (!(piece.xPosition === xPosition && piece.yPosition === yPosition - pawnDirection))
+                        {
+                            if (piece.type === PieceType.PAWN)
+                            {
+                                piece.enPassant = false;
+                            }
+                            results.push(piece);
+                        }
+
+                        return results;
+                    }, [] as Piece[])
+
+                    setPieces(updatedPieces);
+                    
+                } else if (validMove)
                 {
                     // UPDATES PIECE POSITION
                     // If piece is attacked, it is removed
                     const updatedPieces = pieces.reduce((results, piece) => {
-                        if (piece.xPosition === currentPiece.xPosition && piece.yPosition === currentPiece.yPosition)
+                        if (piece.xPosition === gridX && piece.yPosition === gridY)
                         {
+                            if (Math.abs(gridY - yPosition) === 2 && piece.type === PieceType.PAWN)
+                            {
+                                // Special Move
+                                piece.enPassant = true;
+                            } else
+                            {
+                                piece.enPassant = false;
+                            }
                             piece.xPosition = xPosition;
                             piece.yPosition = yPosition;
                             results.push(piece);
                         } else if (!(piece.xPosition === xPosition && piece.yPosition === yPosition))
                         {
+                            if (piece.type === PieceType.PAWN)
+                            {
+                                piece.enPassant = false;
+                            }
                             results.push(piece);
                         }
 

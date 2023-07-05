@@ -36,6 +36,32 @@ export default class Referee
             }
         }
 
+    isEnPassantMove(
+        previousXPosition: number, 
+        previousYPosition: number, 
+        xPosition: number, 
+        yPosition: number, 
+        type: PieceType, 
+        team: TeamType,
+        boardState: Piece[]
+        )
+    {
+        const pawnDirection = team === TeamType.OUR ? 1 : -1;
+        
+        if (type === PieceType.PAWN)
+        {
+            if ((xPosition - previousXPosition === -1 || xPosition - previousXPosition === 1) && yPosition - previousYPosition === pawnDirection)
+            {
+                const piece = boardState.find(p => p.xPosition === xPosition && p.yPosition === yPosition - pawnDirection && p.enPassant);
+                if (piece)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     isValidMove(
         previousXPosition: number, 
         previousYPosition: number, 
