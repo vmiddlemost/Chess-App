@@ -8,6 +8,9 @@ export default class Referee
         boardstate: Piece[]
         ): boolean
         {
+            // tileIsOccupied is a method which scans through the array of all pieces currently on the board and
+            // checks if the tile which the player wishes to move to is already occupied by one of these pieces,
+            // returning true if it is occupied
             const piece = boardstate.find(p => p.position.x === xPosition && p.position.y === yPosition);
 
             if (piece)
@@ -25,6 +28,10 @@ export default class Referee
         team: TeamType
         ): boolean
         {
+            // tileIsOccupied is a method which scans through the array of all pieces currently on the board and
+            // checks if the tile which the player wishes to move to is occupied by an OPPONENT'S piece,
+            // returning true if it is occupied by an OPPONENT'S piece.
+            // This method is only used for ATTACKING LOGIC, not movement.
             const piece = boardState.find((p) => p.position.x === xPosition && p.position.y === yPosition && p.team !== team);
 
             if (piece)
@@ -79,11 +86,14 @@ export default class Referee
             // MOVEMENT LOGIC
             if (initialPosition.x === desiredPosition.x && initialPosition.y === specialRow && desiredPosition.y - initialPosition.y === 2 * pawnDirection)
             {
-                if (!this.tileIsOccupied(desiredPosition.x, desiredPosition.y, boardState) && !this.tileIsOccupied(desiredPosition.x, desiredPosition.y - pawnDirection, boardState))
+                // second if condition makes it so pawns cannot jump over pieces
+                if (!this.tileIsOccupied(desiredPosition.x, desiredPosition.y, boardState) 
+                && !this.tileIsOccupied(desiredPosition.x, desiredPosition.y - pawnDirection, boardState))
                 {
                     return true;
                 }
-            } else if (initialPosition.x === desiredPosition.x && desiredPosition.y - initialPosition.y === pawnDirection) 
+            } else if (initialPosition.x === desiredPosition.x 
+                && desiredPosition.y - initialPosition.y === pawnDirection) 
             {
                 if (!this.tileIsOccupied(desiredPosition.x, desiredPosition.y, boardState))
                 {
@@ -91,7 +101,8 @@ export default class Referee
                 } 
             }
             // ATTACKING LOGIC
-            else if (desiredPosition.x - initialPosition.x === -1 && desiredPosition.y - initialPosition.y === pawnDirection)
+            else if (desiredPosition.x - initialPosition.x === -1 
+                && desiredPosition.y - initialPosition.y === pawnDirection)
             {
                 // taking to diagonally left
                 if (this.tileIsOccupiedByOpponent(desiredPosition.x, desiredPosition.y, boardState, team))
@@ -99,7 +110,8 @@ export default class Referee
                     return true;
                 }
             }
-            else if (desiredPosition.x - initialPosition.x === 1 && desiredPosition.y - initialPosition.y === pawnDirection)
+            else if (desiredPosition.x - initialPosition.x === 1 
+                && desiredPosition.y - initialPosition.y === pawnDirection)
             {
                 // taking diagonally right
                 if (this.tileIsOccupiedByOpponent(desiredPosition.x, desiredPosition.y, boardState, team))
@@ -108,7 +120,48 @@ export default class Referee
                 }
             }
         } 
+        // ROOK RULES
+        if (type === PieceType.ROOK)
+        {
+            // MOVEMENT LOGIC
+            // VERICAL MOVEMENT
+            if (initialPosition.x === desiredPosition.x 
+                && initialPosition.y !== desiredPosition.y)
+            {
+                let direction = (desiredPosition.y < initialPosition.y) ? -1 : 1;
+
+                for (let i = 1; i <= Math.abs(desiredPosition.y - initialPosition.y); i++)
+                {
+                    if (this.tileIsOccupied(desiredPosition.x, initialPosition.y + (i * direction), boardState))
+                    {
+                        return false;
+                    } 
+                }
+                if (!this.tileIsOccupied(desiredPosition.x, desiredPosition.y, boardState))
+                {
+                    return true;
+                }
+            } else if (initialPosition.y === desiredPosition.y 
+                && initialPosition.x !== desiredPosition.x)
+                // HORIZONTAL MOVEMENT
+            {
+                let direction = (desiredPosition.x < initialPosition.x) ? -1 : 1;
+
+                for (let i = 1; i <= Math.abs(desiredPosition.y - initialPosition.y); i++)
+                {
+                    if (this.tileIsOccupied(initialPosition.x + (i * direction), initialPosition.y, boardState))
+                    {
+                        return false;
+                    } 
+                }
+                if (!this.tileIsOccupied(desiredPosition.x, desiredPosition.y, boardState))
+                {
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
+
 }
