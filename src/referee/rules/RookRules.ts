@@ -58,3 +58,125 @@ export const rookMove = (
     }
     return false;
 }
+export const getPossibleRookMoves = (
+    rook: Piece, 
+    boardState: Piece[]
+    ): Position[] => 
+{
+    const possibleMoves: Position[] = [];
+
+    // TOP possible moves
+    for (let i = 1; i < 8; i++)
+    {
+        const destination: Position = {x: rook.position.x, y: rook.position.y + i}
+        
+        if (!tileIsOccupied(
+            rook.position.x,
+            rook.position.y + i,
+            boardState))
+        {
+            possibleMoves.push(destination);
+        }
+        else if (tileIsOccupiedByOpponent(
+            rook.position.x,
+            rook.position.y + i,
+            boardState,
+            rook.team
+        ))
+        {
+            possibleMoves.push(destination);
+            break;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    // BOTTOM possible moves
+    for (let i = 1; i < 8; i++)
+    {
+        const destination: Position = {x: rook.position.x, y: rook.position.y - i}
+        
+        if (!tileIsOccupied(
+            rook.position.x,
+            rook.position.y - i,
+            boardState))
+        {
+            possibleMoves.push(destination);
+        }
+        else if (tileIsOccupiedByOpponent(
+            rook.position.x,
+            rook.position.y - i,
+            boardState,
+            rook.team
+        ))
+        {
+            possibleMoves.push(destination);
+            break;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    // RIGHT possible moves
+    for (let i = 1; i < 8; i++)
+    {
+        const destination: Position = {x: rook.position.x + i, y: rook.position.y}
+        
+        if (!tileIsOccupied(
+            rook.position.x + i,
+            rook.position.y,
+            boardState))
+        {
+            possibleMoves.push(destination);
+        }
+        else if (tileIsOccupiedByOpponent(
+            rook.position.x + i,
+            rook.position.y,
+            boardState,
+            rook.team
+        ))
+        {
+            possibleMoves.push(destination);
+            break;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    // LEFT possible moves
+    for (let i = 1; i < 8; i++)
+    {
+        const destination: Position = {x: rook.position.x - i, y: rook.position.y}
+        
+        if (!tileIsOccupied(
+            rook.position.x - i,
+            rook.position.y,
+            boardState))
+        {
+            possibleMoves.push(destination);
+        }
+        else if (tileIsOccupiedByOpponent(
+            rook.position.x - i,
+            rook.position.y,
+            boardState,
+            rook.team
+        ))
+        {
+            possibleMoves.push(destination);
+            break;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+
+    return possibleMoves;
+}
