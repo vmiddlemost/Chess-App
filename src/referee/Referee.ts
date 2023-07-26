@@ -1,9 +1,9 @@
 import { PieceType, TeamType, Piece, Position } from "../Constants";
-import { bishopMove } from "./rules/BishopRules";
-import { kingMove } from "./rules/Kingrules";
+import { bishopMove, getPossibleBishopMoves} from "./rules/BishopRules";
+import { kingMove, getPossibleKingMoves } from "./rules/Kingrules";
 import { knightMove, getPossibleKnightMoves } from "./rules/KnightRules";
 import { getPossiblePawnMoves, pawnMove } from "./rules/PawnRules";
-import { queenMove } from "./rules/QueenRules";
+import { queenMove, getPossibleQueenMoves } from "./rules/QueenRules";
 import { rookMove, getPossibleRookMoves } from "./rules/RookRules";
 
 export default class Referee
@@ -78,6 +78,12 @@ export default class Referee
                 return getPossibleRookMoves(piece, boardState);
             case PieceType.KNIGHT:
                 return getPossibleKnightMoves(piece, boardState);
+            case PieceType.BISHOP:
+                return getPossibleBishopMoves(piece, boardState);
+            case PieceType.QUEEN:
+                return getPossibleQueenMoves(piece, boardState);
+            case PieceType.KING:
+                return getPossibleKingMoves(piece, boardState);
             default:
                 return[];
         }

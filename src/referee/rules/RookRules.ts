@@ -109,8 +109,7 @@ export const getPossibleRookMoves = (
             rook.position.x,
             rook.position.y - i,
             boardState,
-            rook.team
-        ))
+            rook.team))
         {
             possibleMoves.push(destination);
             break;
@@ -137,8 +136,7 @@ export const getPossibleRookMoves = (
             rook.position.x + i,
             rook.position.y,
             boardState,
-            rook.team
-        ))
+            rook.team))
         {
             possibleMoves.push(destination);
             break;
@@ -165,8 +163,7 @@ export const getPossibleRookMoves = (
             rook.position.x - i,
             rook.position.y,
             boardState,
-            rook.team
-        ))
+            rook.team))
         {
             possibleMoves.push(destination);
             break;
