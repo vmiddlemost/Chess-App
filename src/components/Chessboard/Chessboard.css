@@ -16,12 +16,12 @@
 
 #chessboard .black-tile
 {
-    background-color: rgb(196, 87, 87);
+    background-color: rgb(136, 119, 183);
 }
 
 #chessboard .white-tile
 {
-    background-color: rgb(233, 181, 181);
+    background-color: rgb(239, 239, 239);
 }
 
 .tile-highlight::before
@@ -31,4 +31,44 @@
     height: 30px;
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.3);
+}
+
+#pawn-promotion-modal
+{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+
+#pawn-promotion-modal.hidden
+{
+    display: none;
+}
+
+#pawn-promotion-modal > .modal-body
+{
+    position: absolute;
+    top: calc(50% - 150px);
+    left: calc(50% - 375px);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 300px;
+    width: 750px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#pawn-promotion-modal > .modal-body > img
+{
+    height: 120px;
+    padding: 20px;
+    border-radius: 50%;
+}
+
+#pawn-promotion-modal > .modal-body > img:hover
+{
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
 }
