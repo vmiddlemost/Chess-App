@@ -39,3 +39,21 @@
 {
     width: 80px;
 }
+
+.tile-highlight:not(.chess-piece-tile)::before
+{
+    content: "";
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.tile-highlight.chess-piece-tile::before
+{
+    content: "";
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
