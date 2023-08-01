@@ -1,7 +1,8 @@
-import { Piece, Position, TeamType } from "../../Constants";
+import { TeamType } from "../../Constants";
 import { tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
 import { bishopMove } from "./BishopRules";
 import { rookMove } from "./RookRules"
+import { Piece, Position } from "../../models";
 
 export const queenMove = (
     initialPosition: Position,
@@ -35,7 +36,7 @@ export const getPossibleQueenMoves = (
     // TOP possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: queen.position.x, y: queen.position.y + i}
+        const destination = new Position( queen.position.x, queen.position.y + i)
         
         if (!tileIsOccupied(
             queen.position.x,
@@ -63,7 +64,7 @@ export const getPossibleQueenMoves = (
     // BOTTOM possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: queen.position.x, y: queen.position.y - i}
+        const destination = new Position( queen.position.x, queen.position.y - i)
         
         if (!tileIsOccupied(
             queen.position.x,
@@ -90,7 +91,7 @@ export const getPossibleQueenMoves = (
     // RIGHT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: queen.position.x + i, y: queen.position.y}
+        const destination = new Position( queen.position.x + i, queen.position.y)
         
         if (!tileIsOccupied(
             queen.position.x + i,
@@ -117,7 +118,7 @@ export const getPossibleQueenMoves = (
     // LEFT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: queen.position.x - i, y: queen.position.y}
+        const destination = new Position( queen.position.x - i, queen.position.y)
         
         if (!tileIsOccupied(
             queen.position.x - i,
@@ -144,7 +145,7 @@ export const getPossibleQueenMoves = (
         // TOP RIGHT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: queen.position.x + i, y: queen.position.y + i}
+        const destination = new Position( queen.position.x + i, queen.position.y + i)
 
         if (!tileIsOccupied(
             queen.position.x + i,
@@ -171,7 +172,7 @@ export const getPossibleQueenMoves = (
     // BOTTOM LEFT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: queen.position.x - i, y: queen.position.y - i}
+        const destination = new Position( queen.position.x - i, queen.position.y - i)
 
         if (!tileIsOccupied(
             queen.position.x - i,
@@ -198,7 +199,7 @@ export const getPossibleQueenMoves = (
     // TOP LEFT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: queen.position.x - i, y: queen.position.y + i}
+        const destination = new Position( queen.position.x - i, queen.position.y + i)
 
         if (!tileIsOccupied(
             queen.position.x - i,
@@ -225,7 +226,7 @@ export const getPossibleQueenMoves = (
     // BOTTOM RIGHT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: queen.position.x + i, y: queen.position.y - i}
+        const destination = new Position( queen.position.x + i, queen.position.y - i)
 
         if (!tileIsOccupied(
             queen.position.x + i,

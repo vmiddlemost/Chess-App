@@ -1,4 +1,5 @@
-import { Piece, Position, TeamType } from "../../Constants";
+import { TeamType } from "../../Constants";
+import { Piece, Position } from "../../models";
 import { tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
 
 export const bishopMove = (
@@ -64,7 +65,7 @@ export const getPossibleBishopMoves = (
     // TOP RIGHT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: bishop.position.x + i, y: bishop.position.y + i}
+        const destination = new Position( bishop.position.x + i, bishop.position.y + i)
 
         if (!tileIsOccupied(
             bishop.position.x + i,
@@ -91,7 +92,7 @@ export const getPossibleBishopMoves = (
     // BOTTOM LEFT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: bishop.position.x - i, y: bishop.position.y - i}
+        const destination = new Position( bishop.position.x - i, bishop.position.y - i)
 
         if (!tileIsOccupied(
             bishop.position.x - i,
@@ -118,7 +119,7 @@ export const getPossibleBishopMoves = (
     // TOP LEFT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: bishop.position.x - i, y: bishop.position.y + i}
+        const destination = new Position( bishop.position.x - i, bishop.position.y + i)
 
         if (!tileIsOccupied(
             bishop.position.x - i,
@@ -145,7 +146,7 @@ export const getPossibleBishopMoves = (
     // BOTTOM RIGHT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: bishop.position.x + i, y: bishop.position.y - i}
+        const destination = new Position( bishop.position.x + i, bishop.position.y - i)
 
         if (!tileIsOccupied(
             bishop.position.x + i,

@@ -1,4 +1,5 @@
-import { Piece, Position, TeamType } from "../../Constants";
+import { TeamType } from "../../Constants";
+import { Piece, Position } from "../../models";
 import { tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
 
 export const kingMove = (
@@ -34,7 +35,7 @@ export const getPossibleKingMoves = (
         // TOP possible moves
     for (let i = 1; i < 2; i++)
     {
-        const destination: Position = {x: king.position.x, y: king.position.y + i}
+        const destination = new Position( king.position.x, king.position.y + i)
         
         if (!tileIsOccupied(
             king.position.x,
@@ -62,7 +63,7 @@ export const getPossibleKingMoves = (
     // BOTTOM possible moves
     for (let i = 1; i < 2; i++)
     {
-        const destination: Position = {x: king.position.x, y: king.position.y - i}
+        const destination = new Position( king.position.x, king.position.y - i)
         
         if (!tileIsOccupied(
             king.position.x,
@@ -89,7 +90,7 @@ export const getPossibleKingMoves = (
     // RIGHT possible moves
     for (let i = 1; i < 2; i++)
     {
-        const destination: Position = {x: king.position.x + i, y: king.position.y}
+        const destination = new Position( king.position.x + i, king.position.y)
         
         if (!tileIsOccupied(
             king.position.x + i,
@@ -116,7 +117,7 @@ export const getPossibleKingMoves = (
     // LEFT possible moves
     for (let i = 1; i < 2; i++)
     {
-        const destination: Position = {x: king.position.x - i, y: king.position.y}
+        const destination = new Position( king.position.x - i, king.position.y)
         
         if (!tileIsOccupied(
             king.position.x - i,
@@ -143,7 +144,7 @@ export const getPossibleKingMoves = (
         // TOP RIGHT possible moves
     for (let i = 1; i < 2; i++)
     {
-        const destination: Position = {x: king.position.x + i, y: king.position.y + i}
+        const destination = new Position( king.position.x + i, king.position.y + i)
 
         if (!tileIsOccupied(
             king.position.x + i,
@@ -170,7 +171,7 @@ export const getPossibleKingMoves = (
     // BOTTOM LEFT possible moves
     for (let i = 1; i < 2; i++)
     {
-        const destination: Position = {x: king.position.x - i, y: king.position.y - i}
+        const destination = new Position( king.position.x - i, king.position.y- i)
 
         if (!tileIsOccupied(
             king.position.x - i,
@@ -197,7 +198,7 @@ export const getPossibleKingMoves = (
     // TOP LEFT possible moves
     for (let i = 1; i < 2; i++)
     {
-        const destination: Position = {x: king.position.x - i, y: king.position.y + i}
+        const destination = new Position( king.position.x - i, king.position.y + i)
 
         if (!tileIsOccupied(
             king.position.x - i,
@@ -224,7 +225,7 @@ export const getPossibleKingMoves = (
     // BOTTOM RIGHT possible moves
     for (let i = 1; i < 2; i++)
     {
-        const destination: Position = {x: king.position.x + i, y: king.position.y - i}
+        const destination = new Position( king.position.x + i, king.position.y -1 )
 
         if (!tileIsOccupied(
             king.position.x + i,

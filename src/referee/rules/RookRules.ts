@@ -1,4 +1,5 @@
-import { Position, TeamType, Piece } from "../../Constants";
+import { TeamType } from "../../Constants";
+import { Piece, Position } from "../../models";
 import { tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
 
 
@@ -68,7 +69,7 @@ export const getPossibleRookMoves = (
     // TOP possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: rook.position.x, y: rook.position.y + i}
+        const destination = new Position( rook.position.x, rook.position.y + i );
         
         if (!tileIsOccupied(
             rook.position.x,
@@ -96,7 +97,7 @@ export const getPossibleRookMoves = (
     // BOTTOM possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: rook.position.x, y: rook.position.y - i}
+        const destination= new Position( rook.position.x, rook.position.y - i )
         
         if (!tileIsOccupied(
             rook.position.x,
@@ -123,7 +124,7 @@ export const getPossibleRookMoves = (
     // RIGHT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: rook.position.x + i, y: rook.position.y}
+        const destination = new Position( rook.position.x + i, rook.position.y )
         
         if (!tileIsOccupied(
             rook.position.x + i,
@@ -150,7 +151,7 @@ export const getPossibleRookMoves = (
     // LEFT possible moves
     for (let i = 1; i < 8; i++)
     {
-        const destination: Position = {x: rook.position.x - i, y: rook.position.y}
+        const destination= new Position( rook.position.x - i, rook.position.y )
         
         if (!tileIsOccupied(
             rook.position.x - i,

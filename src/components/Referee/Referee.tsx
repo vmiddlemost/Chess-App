@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Piece, PieceType, Position, TeamType, initialBoardState, samePosition } from "../../Constants";
+import { PieceType, TeamType, initialBoardState, samePosition } from "../../Constants";
 import Chessboard from "../Chessboard/Chessboard";
 import { getPossiblePawnMoves, pawnMove } from "../../referee/rules/PawnRules";
 import { getPossibleRookMoves, rookMove } from "../../referee/rules/RookRules";
@@ -7,6 +7,7 @@ import { getPossibleKnightMoves, knightMove } from "../../referee/rules/KnightRu
 import { bishopMove, getPossibleBishopMoves } from "../../referee/rules/BishopRules";
 import { getPossibleQueenMoves, queenMove } from "../../referee/rules/QueenRules";
 import { getPossibleKingMoves, kingMove } from "../../referee/rules/Kingrules";
+import { Piece, Position } from "../../models";
 
 export default function Referee() {
     const [pieces, setPieces] = useState<Piece[]>(initialBoardState);
@@ -49,7 +50,7 @@ export default function Referee() {
                     piece.position.x = destination.x;
                     piece.position.y = destination.y;
                     results.push(piece);
-                } else if (!samePosition(piece.position, { x: destination.x, y: destination.y - pawnDirection })) {
+                } else if (!samePosition(piece.position, new Position( destination.x, destination.y - pawnDirection ))) {
                     if (piece.type === PieceType.PAWN) {
                         piece.enPassant = false;
                     }
@@ -81,7 +82,7 @@ export default function Referee() {
                     }
 
                     results.push(piece);
-                } else if (!samePosition(piece.position, { x: destination.x, y: destination.y })) {
+                } else if (!samePosition(piece.position, new Position( destination.x, destination.y ))) {
                     if (piece.type === PieceType.PAWN) {
                         piece.enPassant = false;
                     }
@@ -169,29 +170,25 @@ export default function Referee() {
         }
     }
 
-    function promotePawn(pieceType: PieceType)
-    {
-        if (promotionPawn === undefined)
-        {
+    function promotePawn(pieceType: PieceType) {
+        if (promotionPawn === undefined) {
             return;
         }
         const updatedPieces = pieces.reduce((results, piece) => {
-            if (samePosition(piece.position, promotionPawn.position))
-            {
+            if (samePosition(piece.position, promotionPawn.position)) {
                 piece.type = pieceType;
                 const teamType = (piece.team === TeamType.OUR) ? "w" : "b";
-                switch(piece.type)
-                {
-                    case 1:
+                switch (piece.type) {
+                    case 'bishop':
                         piece.image = `assets/images/bishop_${teamType}.png`;
                         break;
-                    case 2:
+                    case 'knight':
                         piece.image = `assets/images/knight_${teamType}.png`;
                         break;
-                    case 3:
+                    case 'rook':
                         piece.image = `assets/images/rook_${teamType}.png`;
                         break;
-                    case 4:
+                    case 'queen':
                         piece.image = `assets/images/queen_${teamType}.png`;
                         break;
                     default:
@@ -207,8 +204,7 @@ export default function Referee() {
         modalRef.current?.classList.add("hidden");
     }
 
-    function promotionTeamType()
-    {
+    function promotionTeamType() {
         return promotionPawn?.team === TeamType.OUR ? "w" : "b";
     }
 

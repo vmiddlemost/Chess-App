@@ -1,4 +1,5 @@
-import { Position, TeamType, Piece, samePosition, PieceType } from "../../Constants";
+import { TeamType, samePosition, PieceType } from "../../Constants";
+import { Piece, Position } from "../../models";
 import { tileIsOccupied, tileIsOccupiedByOpponent } from "./GeneralRules";
 
 export const pawnMove = (
@@ -62,12 +63,12 @@ export const getPossiblePawnMoves = (
     const pawnDirection = pawn.team === TeamType.OUR ? 1 : -1;
     const specialRow = pawn.team === TeamType.OUR ? 1 : 6;
 
-    const normalMove: Position = { x: pawn.position.x, y: pawn.position.y + pawnDirection};
-    const specialMove: Position = { x: normalMove.x, y: normalMove.y + pawnDirection};
-    const rightAttack: Position = { x: pawn.position.x + 1, y: pawn.position.y + pawnDirection};
-    const leftAttack: Position = { x: pawn.position.x - 1, y: pawn.position.y + pawnDirection};
-    const leftPosition: Position = {x: pawn.position.x - 1, y: pawn.position.y};
-    const rightPosition: Position = {x: pawn.position.x + 1, y: pawn.position.y};
+    const normalMove = new Position( pawn.position.x, pawn.position.y + pawnDirection)
+    const specialMove = new Position( normalMove.x, normalMove.y + pawnDirection)
+    const rightAttack = new Position( pawn.position.x + 1, pawn.position.y + pawnDirection)
+    const leftAttack = new Position( pawn.position.x - 1, pawn.position.y + pawnDirection)
+    const leftPosition = new Position( pawn.position.x - 1, pawn.position.y)
+    const rightPosition = new Position( pawn.position.x + 1, pawn.position.y)
 
     // this chunk logs all of the possible NON-ATTACKING moves the pawn may use
     if (!tileIsOccupied(
